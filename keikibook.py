@@ -1,12 +1,22 @@
-from flask import Flask,render_template,make_response
+from flask import Flask,url_for,jsonify
 app = Flask(__name__)
 
-@app.errorhandler(404)
-def not_found(error):
-    return render_template('error.html'), 404
+def get_current_user():
+    pass
 
-@app.errorhandler(404)
-def not_found(error):
-    resp = make_response(render_template('error.html'), 404)
-    resp.headers['X-Something'] = 'A value'
-    return resp
+def get_all_users():
+    pass
+
+@app.route("/me")
+def me_api():
+    user = get_current_user()
+    return {
+        "username": user.username,
+        "theme": user.theme,
+        "image": url_for("user_image", filename=user.image),
+    }
+
+@app.route("/users")
+def users_api():
+    users = get_all_users()
+    return jsonify([user.to_json() for user in users])
