@@ -2,15 +2,24 @@ from flask import Flask,request
 
 app = Flask(__name__)
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/login', methods=['POST', 'GET'])
 def login():
+    error = None
     if request.method == 'POST':
-        return do_the_login()
-    else:
-        return show_the_login_form()
+        if valid_login(request.form['username'],
+                       request.form['password']):
+            return log_the_user_in(request.form['username'])
+        else:
+            error = 'Invalid username/password'
+    # the code below is executed if the request method
+    # was GET or the credentials were invalid
+    return render_template('login.html', error=error)
 
-def do_the_login():
+def valid_login():
     pass
 
-def show_the_login_form():
+def log_the_user_in():
+    pass
+
+def render_template():
     pass
