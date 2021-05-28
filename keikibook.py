@@ -1,17 +1,18 @@
-from flask import Flask,make_response,request
+from flask import Flask,abort, redirect, url_for,render_template
 app = Flask(__name__)
 
 @app.route('/')
 def index():
-    username = request.cookies.get('username')
-    # use cookies.get(key) instead of cookies[key] to not get a
-    # KeyError if the cookie is missing.
+    return redirect(url_for('login'))
 
-@app.route('/')
-def index():
-    resp = make_response(render_template(...))
-    resp.set_cookie('username', 'the username')
-    return resp
+@app.route('/login')
+def login():
+    abort(401)
+    this_is_never_executed()
 
-def render_template():
+def this_is_never_executed():
     pass
+
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template('page_not_found.html'), 404
